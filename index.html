@@ -1,13 +1,16 @@
 <!doctype html>
 <html>
   <head>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
     <title>¡!¡ ΑΧΑ ¡!¡</title>
   </head>
-  <body style="background: #001; color: #eef; font-family: sans-serif; text-align: center; padding-top: 140px; width: 100%; height: 100%; overflow: hidden">
-    <div style="position: relative; font-size: 50px; letter-spacing: -3px;">ΧΑΝΙ<span style="color: red; font-size: 80px;">ΑΧΑ</span>ΝΙΑ</div>
-    <div style="font-size: 20px; position: relative; left: 16px;"><span style="color: red">Α</span>ΓΑΠΗ <span style="opacity: 0.3; font-size: 24px; position: relative; top: 2px;">+</span> <span style="color: red">ΧΑ</span>ΡΑ</div>
-    <div><img src="./crete.png" width="30%" style="margin: 20px"></div>
+  <body style="background: #001; color: #eef; font-family: 'Comfortaa', sans-serif; text-align: center; padding-top: 50px; width: 100%; height: 100%; overflow: hidden; letter-spacing: 1px">
+    <div><img src="./balloon.png" height="150px" style="position: relative; left: 1px; margin-bottom: 5px"></div>
+    <div style="line-height: 22px">μαζί<br>juntos<br>together</div>
+    <div style="margin: 20px 0; position: relative; left: -18px; font-size: 50px; letter-spacing: 0px;">ΧΑΝΙ<div style="position: relative; display: inline-block; top: 11px; color: red; font-size: 80px; font-weight: bold">ΑΧΑ<span style="position: absolute; right: 74.5px; top: -64px;">.</span></div>ΝΙΑ</div>
+    <div style="font-size: 20px; position: relative;"><span style="color: red">Α</span>ΓΑΠΗ <span style="opacity: 0.3; font-size: 24px; position: relative; top: 1px;">&amp;</span> <span style="color: red">ΧΑ</span>ΡΑ</div>
+    <div style="position: relative; left: -7px"><img src="./crete.png" width="210px" style="margin: 35px"></div>
     <iframe style="opacity: 0" width="560" height="315" src="https://www.youtube.com/embed/wBmZAg8HxfY?rel=0&amp;controls=0&amp;showinfo=0&amp;start=12;autoplay=true" frameborder="0" allowfullscreen></iframe>
     <script>
       let axa = document.createElement('div')
@@ -16,6 +19,54 @@
       axa.style = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; word-break: break-all; z-index: -1; color: #223; font-size: 13px"
       document.body.appendChild(axa)
 
+      let mouse = {
+        down: false,
+        x: 0,
+        y: 0
+      }
+
+      window.onmousedown = document.body.ontouchstart = (e) => {
+        e.preventDefault()
+
+        mouse.down = true
+
+        let balloon = new Image()
+
+        balloon.src = './balloon.png'
+        balloon.className = 'balloon'
+
+        inflate(balloon)
+
+        document.body.appendChild(balloon)
+
+        return false
+      }
+
+      window.onmousemove = document.body.ontouchmove = (e) => {
+        mouse.x = e.clientX
+        mouse.y = e.clientY
+      }
+
+      window.onmouseup = document.body.ontouchend = () => mouse.down = false
+
+      function inflate(balloon, width = 20) {
+        let x = (mouse.x - (width / 2 + width * 0.005))
+        balloon.style.width = width + 'px'
+        balloon.style.left = x + 'px'
+        let rect = balloon.getBoundingClientRect()
+        let y = (mouse.y - rect.height + rect.height * 0.21)
+        balloon.style.top = y + 'px'
+        if (mouse.down) setTimeout(inflate, 4, balloon, width + 1)
+        else fly(balloon, x, y, Date.now())
+      }
+
+      function fly(balloon, x, y, time) {
+        x = x + (Math.sin((Date.now() - time) * 0.005) * .6)
+        y = y - Math.random()
+        balloon.style.left = x + 'px'
+        balloon.style.top = y + 'px'
+        setTimeout(fly, 16, balloon, x, y, time)
+      }
     </script>
   </body>
 </html>
